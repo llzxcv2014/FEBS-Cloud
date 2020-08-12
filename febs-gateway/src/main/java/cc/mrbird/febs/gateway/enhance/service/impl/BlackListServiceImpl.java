@@ -1,7 +1,8 @@
 package cc.mrbird.febs.gateway.enhance.service.impl;
 
-import cc.mrbird.febs.common.entity.QueryRequest;
-import cc.mrbird.febs.common.utils.DateUtil;
+import cc.mrbird.febs.common.core.entity.QueryRequest;
+import cc.mrbird.febs.common.core.entity.constant.StringConstant;
+import cc.mrbird.febs.common.core.utils.DateUtil;
 import cc.mrbird.febs.gateway.enhance.entity.BlackList;
 import cc.mrbird.febs.gateway.enhance.mapper.BlackListMapper;
 import cc.mrbird.febs.gateway.enhance.service.BlackListService;
@@ -20,6 +21,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 /**
  * @author MrBird
@@ -29,6 +31,7 @@ import java.time.LocalDateTime;
 public class BlackListServiceImpl implements BlackListService {
 
 
+    private final RouteEnhanceCacheService routeEnhanceCacheService;
     private BlackListMapper blackListMapper;
     private ReactiveMongoTemplate template;
 
@@ -36,11 +39,11 @@ public class BlackListServiceImpl implements BlackListService {
     public void setBlackListMapper(BlackListMapper blackListMapper) {
         this.blackListMapper = blackListMapper;
     }
+
     @Autowired(required = false)
     public void setTemplate(ReactiveMongoTemplate template) {
         this.template = template;
     }
-    private final RouteEnhanceCacheService routeEnhanceCacheService;
 
     @Override
     public Flux<BlackList> findAll() {
@@ -68,8 +71,8 @@ public class BlackListServiceImpl implements BlackListService {
 
     @Override
     public Flux<BlackList> delete(String ids) {
-        String[] idArray = StringUtils.splitByWholeSeparatorPreserveAllTokens(ids, ",");
-        return blackListMapper.deleteByIdIn(idArray)
+        String[] idArray = StringUtils.splitByWholeSeparatorPreserveAllTokens(ids, StringConstant.COMMA);
+        return blackListMapper.deleteByIdIn(Arrays.asList(idArray))
                 .doOnNext(routeEnhanceCacheService::removeBlackList);
     }
 

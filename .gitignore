@@ -3,3 +3,6 @@
 **/.idea/
 **/log/
 **/*.iml
+/febs-cloud/.txlcn/
+**/spy.log
+*/.DS_Store

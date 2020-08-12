@@ -1,7 +1,6 @@
 package cc.mrbird.febs.gateway.enhance.configure;
 
-import cc.mrbird.febs.common.annotation.EnableFebsLettuceRedis;
-import cc.mrbird.febs.common.entity.constant.FebsConstant;
+import cc.mrbird.febs.common.core.entity.constant.FebsConstant;
 import cc.mrbird.febs.gateway.enhance.runner.FebsRouteEnhanceRunner;
 import cc.mrbird.febs.gateway.enhance.service.BlackListService;
 import cc.mrbird.febs.gateway.enhance.service.RateLimitRuleService;
@@ -21,7 +20,6 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @EnableAsync
 @Configuration
-@EnableFebsLettuceRedis
 @EnableReactiveMongoRepositories(basePackages = "cc.mrbird.febs.gateway.enhance.mapper")
 @ConditionalOnProperty(name = "febs.gateway.enhance", havingValue = "true")
 public class FebsRouteEnhanceConfigure {
@@ -42,7 +40,7 @@ public class FebsRouteEnhanceConfigure {
     }
 
     @Bean
-    public ApplicationRunner febsRoutenEhanceRunner(RouteEnhanceCacheService cacheService,
+    public ApplicationRunner febsRouteEnhanceRunner(RouteEnhanceCacheService cacheService,
                                                     BlackListService blackListService,
                                                     RateLimitRuleService rateLimitRuleService) {
         return new FebsRouteEnhanceRunner(cacheService, blackListService, rateLimitRuleService);

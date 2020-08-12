@@ -1,6 +1,6 @@
 package cc.mrbird.febs.gateway.enhance.service;
 
-import cc.mrbird.febs.common.entity.constant.FebsConstant;
+import cc.mrbird.febs.common.core.entity.constant.FebsConstant;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -16,7 +16,7 @@ public interface RouteEnhanceService {
      * @param exchange ServerWebExchange
      * @return Mono<Void>
      */
-    Mono<Void> filterBalckList(ServerWebExchange exchange);
+    Mono<Void> filterBlackList(ServerWebExchange exchange);
 
     /**
      * 根据限流规则进行过滤

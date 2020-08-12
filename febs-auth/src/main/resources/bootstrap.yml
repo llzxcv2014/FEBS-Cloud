@@ -1,8 +1,6 @@
 spring:
   application:
     name: FEBS-Auth
-  profiles:
-    active: dev
   cloud:
     nacos:
       config:
@@ -12,9 +10,17 @@ spring:
         file-extension: yaml
       discovery:
         server-addr: ${nacos.url}:8001
+  thymeleaf:
+    cache: false
 
 logging:
   level:
+    org:
+      springframework:
+        boot:
+          actuate:
+            endpoint:
+              EndpointId: error
     com:
       alibaba:
         cloud:

@@ -1,6 +1,6 @@
 package cc.mrbird.febs.auth.service.impl;
 
-import cc.mrbird.febs.common.service.RedisService;
+import cc.mrbird.febs.common.redis.service.RedisService;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Yuuki
@@ -54,7 +56,14 @@ public class RedisClientDetailsService extends JdbcClientDetailsService {
         ClientDetails clientDetails = null;
         clientDetails = super.loadClientByClientId(clientId);
         if (clientDetails != null) {
-            redisService.hset(CACHE_CLIENT_KEY, clientId, JSONObject.toJSONString(clientDetails));
+            BaseClientDetails baseClientDetails = (BaseClientDetails) clientDetails;
+            Set<String> autoApproveScopes = baseClientDetails.getAutoApproveScopes();
+            if (CollectionUtils.isNotEmpty(autoApproveScopes)) {
+                baseClientDetails.setAutoApproveScopes(
+                        autoApproveScopes.stream().map(this::convert).collect(Collectors.toSet())
+                );
+            }
+            redisService.hset(CACHE_CLIENT_KEY, clientId, JSONObject.toJSONString(baseClientDetails));
         }
         return clientDetails;
     }
@@ -83,5 +92,10 @@ public class RedisClientDetailsService extends JdbcClientDetailsService {
             return;
         }
         list.forEach(client -> redisService.hset(CACHE_CLIENT_KEY, client.getClientId(), JSONObject.toJSONString(client)));
+    }
+
+    private String convert(String value) {
+        final String logicTrue = "1";
+        return logicTrue.equals(value) ? Boolean.TRUE.toString() : Boolean.FALSE.toString();
     }
 }

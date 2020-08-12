@@ -1,7 +1,8 @@
 package cc.mrbird.febs.gateway.enhance.service.impl;
 
-import cc.mrbird.febs.common.entity.QueryRequest;
-import cc.mrbird.febs.common.utils.DateUtil;
+import cc.mrbird.febs.common.core.entity.QueryRequest;
+import cc.mrbird.febs.common.core.entity.constant.StringConstant;
+import cc.mrbird.febs.common.core.utils.DateUtil;
 import cc.mrbird.febs.gateway.enhance.entity.RouteUser;
 import cc.mrbird.febs.gateway.enhance.mapper.RouteUserMapper;
 import cc.mrbird.febs.gateway.enhance.service.RouteUserService;
@@ -18,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 /**
  * @author MrBird
@@ -35,6 +37,7 @@ public class RouteUserServiceImpl implements RouteUserService {
     public void setRouteUserMapper(RouteUserMapper routeUserMapper) {
         this.routeUserMapper = routeUserMapper;
     }
+
     @Autowired(required = false)
     public void setTemplate(ReactiveMongoTemplate template) {
         this.template = template;
@@ -58,8 +61,8 @@ public class RouteUserServiceImpl implements RouteUserService {
 
     @Override
     public Flux<RouteUser> delete(String ids) {
-        String[] idArray = StringUtils.splitByWholeSeparatorPreserveAllTokens(ids, ",");
-        return routeUserMapper.deleteByIdIn(idArray);
+        String[] idArray = StringUtils.splitByWholeSeparatorPreserveAllTokens(ids, StringConstant.COMMA);
+        return routeUserMapper.deleteByIdIn(Arrays.asList(idArray));
     }
 
     @Override

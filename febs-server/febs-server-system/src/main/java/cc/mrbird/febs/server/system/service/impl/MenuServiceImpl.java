@@ -1,12 +1,13 @@
 package cc.mrbird.febs.server.system.service.impl;
 
-import cc.mrbird.febs.common.entity.MenuTree;
-import cc.mrbird.febs.common.entity.Tree;
-import cc.mrbird.febs.common.entity.constant.PageConstant;
-import cc.mrbird.febs.common.entity.router.RouterMeta;
-import cc.mrbird.febs.common.entity.router.VueRouter;
-import cc.mrbird.febs.common.entity.system.Menu;
-import cc.mrbird.febs.common.utils.TreeUtil;
+import cc.mrbird.febs.common.core.entity.MenuTree;
+import cc.mrbird.febs.common.core.entity.Tree;
+import cc.mrbird.febs.common.core.entity.constant.PageConstant;
+import cc.mrbird.febs.common.core.entity.constant.StringConstant;
+import cc.mrbird.febs.common.core.entity.router.RouterMeta;
+import cc.mrbird.febs.common.core.entity.router.VueRouter;
+import cc.mrbird.febs.common.core.entity.system.Menu;
+import cc.mrbird.febs.common.core.utils.TreeUtil;
 import cc.mrbird.febs.server.system.mapper.MenuMapper;
 import cc.mrbird.febs.server.system.service.IMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -32,7 +33,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     @Override
     public String findUserPermissions(String username) {
         List<Menu> userPermissions = this.baseMapper.findUserPermissions(username);
-        return userPermissions.stream().map(Menu::getPerms).collect(Collectors.joining(","));
+        return userPermissions.stream().map(Menu::getPerms).collect(Collectors.joining(StringConstant.COMMA));
     }
 
     @Override
